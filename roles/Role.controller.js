@@ -46,15 +46,16 @@ export const createRole = async (req, res) => {
 export const getRoleById = async (req, res) => {
   try {
     const { roleId } = req.query;
+    if (!roleId) {
+      return res.status(400).json({ message: "roleId is required" });
+    }
+
     const role = await RoleService.getRolesById(roleId);
 
-    res.status(200).json({
-      status: true,
-      data: role,
-    });
+    res.status(200).json({ status: true, data: role });
   } catch (error) {
     logger.error(`Error getting role: ${error.message}`);
-    res.status(404).json({ message: error.message });
+    res.status(404).json({ status: false, message: error.message });
   }
 };
 
