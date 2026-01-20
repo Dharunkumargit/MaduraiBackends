@@ -3,7 +3,12 @@ import { v4 as uuidv4 } from "uuid";
 import { getLocationFromLatLong } from "../utils/getLocationFromLatLong.js";
 import { createEscalation } from "../Service/Escalation_service.js";
 
-const generateBinId = () => `BINMC${uuidv4().slice(0, 3).toUpperCase()}`;
+let binCounter = 0;
+
+const generateBinId = () => {
+  binCounter += 1;
+  return `MCB${String(binCounter).padStart(3, "0")}`;
+};
 
 export const addBin = async (data) => {
   const binid = generateBinId();
