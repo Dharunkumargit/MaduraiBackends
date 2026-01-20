@@ -12,6 +12,7 @@ const ZoneSchema = new mongoose.Schema(
     totalbins: {
       type: Number,
       required: true,
+      default:0
     },
 
     activebins: {
@@ -28,7 +29,7 @@ const ZoneSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["Active", "Inactive"],
+      
       default: "Active",
     },
 

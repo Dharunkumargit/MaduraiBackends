@@ -13,13 +13,13 @@ const WardSchema = new mongoose.Schema(
       trim: true,
       unique: true, 
     },
-    totalbins: { type: Number, required: true },
+    totalbins: { type: Number, required: true, default:0 },
     activebins: { type: Number, default:0 },
     inactivebins: { type: Number, default:0 },
     status: {
       type: String,
       required: true,
-      enum: ["Active", "Inactive"],
+      
       default: "Active",
     },
   },

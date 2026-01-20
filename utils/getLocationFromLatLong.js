@@ -14,19 +14,13 @@ export const getLocationFromLatLong = async (lat, lon) => {
     });
 
     if (!response || !response.results || response.results.length === 0) {
-      return "Unknown, Unknown, Unknown";
+      return "Unknown, Unknown";
     }
 
     const data = response.results[0].components;
 
     // Extract village
-    const village =
-      data.village ||
-      data.town ||
-      data.hamlet ||
-      data.suburb ||
-      data.city ||
-      "Unknown";
+    
 
     
 
@@ -37,7 +31,7 @@ export const getLocationFromLatLong = async (lat, lon) => {
       
       "Unknown";
 
-    return `${village}, ${state}`;
+    return ` ${state}`;
   } catch (error) {
     console.error("OpenCage Error:", error.message);
     return "Unknown, Unknown, Unknown";

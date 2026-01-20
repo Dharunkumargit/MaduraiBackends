@@ -13,6 +13,7 @@ import zoneroutes from "./zone/Zone.routes.js"
 import wardroutes from "./ward/Ward.routes.js"
 import predictionRoutes from "./prediction/Prediction.routes.js"
 import profileRoutes from "./profiles/Profile.routes.js"
+import dashboardRoutes from "./dashboard/Dashboard.routes.js"
 
 
 
@@ -40,6 +41,7 @@ app.use("/employee", employeeRoutes);
 app.use("/escalation",EscalationRoutes)
 app.use("/predictionss",predictionRoutes)
 app.use("/profile",profileRoutes)
+app.use("/dashboard",dashboardRoutes)
 
 
 
