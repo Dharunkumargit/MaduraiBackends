@@ -1,7 +1,8 @@
 import User from "../models/User_schema.js";
 import bcrypt from "bcryptjs";
+import IdcodeServices from "../idcode/idcode.service.js";
 
-/* ================= CREATE USER ================= */
+
 export const addUser = async (data) => {
   const existingUser = await User.findOne({
     $or: [{ email: data.email }, { phonenumber: data.phonenumber }],
@@ -11,19 +12,25 @@ export const addUser = async (data) => {
     throw new Error("User already exists");
   }
 
-  const rawPassword = data.password || "User@123";
+  
+  const user_id = await IdcodeServices.generateCode("USER");
+  if (!user_id) {
+    throw new Error("Failed to generate user ID");
+  }
 
-const hashedPassword = await bcrypt.hash(rawPassword, 10);
+  const rawPassword = data.password || "User@123";
+  const hashedPassword = await bcrypt.hash(rawPassword, 10);
 
   const user = await User.create({
     ...data,
+    user_id,           
     password: hashedPassword,
   });
 
   return user;
 };
 
-/* ================= LOGIN USER ================= */
+
 export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
 
@@ -83,3 +90,4 @@ export const changePassword = async (id, newPassword) => {
 
   return user;
 };
+

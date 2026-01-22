@@ -20,25 +20,49 @@ class IdcodeServices {
     }
   }
   static async generateCode(idname) {
-    try {
-      var id = "";
-      var { idcode, codes } = await this.getCode(idname);
-      codes = codes + 1;
-      if (codes < 10) {
-        id = idcode + "00" + codes;
-      } else if (codes < 100) {
-        id = idcode + "0" + codes;
-      } else {
-        id = idcode + codes;
+  try {
+    let codeDoc = await this.getCode(idname);
+
+    
+    if (!codeDoc) {
+      let prefix = "";
+
+      switch (idname) {
+        case "EMPLOYEE":
+          prefix = "EMP";
+          break;
+        case "USER":
+          prefix = "USER";
+          break;
+        case "ROLE":
+          prefix = "ROLE";
+          break;
+        default:
+          throw new Error("Invalid ID name");
       }
-      console.log(id);
-      await this.updateCode(idname, codes);
-      return id;
-    } catch (error) {
-      logger.error("error while generating a code" + error);
-      console.log("Error in generating Code");
+
+      await this.addIdCode(idname, prefix);
+      codeDoc = await this.getCode(idname);
     }
+
+    let { idcode, codes } = codeDoc;
+    codes += 1;
+
+    const id =
+      codes < 10
+        ? `${idcode}00${codes}`
+        : codes < 100
+        ? `${idcode}0${codes}`
+        : `${idcode}${codes}`;
+
+    await this.updateCode(idname, codes);
+    return id;
+  } catch (error) {
+    logger.error("Error while generating code: " + error.message);
+    throw error;
   }
+}
+
   static async addIdCode(idname, idcode) {
     try {
       const existingCode = await IdcodeModel.findOne({ idname });
