@@ -7,7 +7,7 @@ import userRoutes from "./routes/User_routes.js"
 import employeeRoutes from "./routes/Employee_routes.js"
 
 import binroutes from "./bins/Bin.routes.js"
-import bindailyroutes from "./bindailydata/bindaily.route.js"
+import bindailyroutes from "./bindailydata/binfullevent.route.js"
 import roleRoutes from "./roles/Role.routes.js";
 import EscalationRoutes from "./routes/Escalation_routes.js"
 import zoneroutes from "./zone/Zone.routes.js"
@@ -38,7 +38,7 @@ app.use(cookieParser());
 
 startLiveMonitor();
 app.use("/bins",binroutes)
-app.use("/bindaily",bindailyroutes)
+app.use("/binfullevents",bindailyroutes)
 app.use("/user", userRoutes)
 app.use("/roles", roleRoutes);
 app.use("/zone",zoneroutes)
@@ -48,6 +48,7 @@ app.use("/escalation",EscalationRoutes)
 app.use("/predictionss",predictionRoutes)
 app.use("/profile",profileRoutes)
 app.use("/dashboard",dashboardRoutes)
+
 
 
 

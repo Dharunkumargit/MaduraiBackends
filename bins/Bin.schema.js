@@ -41,13 +41,33 @@ const binSchema = new mongoose.Schema(
 
     lastCollectedAt: Date,
 
-    // ✅ Metrics
-    clearedCount: { type: Number, default: 0 },
-    totalClearedAmount: { type: Number, default: 0 }, // kg
-    totalClearTimeMins: { type: Number, default: 0 },
-    avgClearTimeMins: { type: Number, default: 0 },
+    // // ✅ Metrics
+    // clearedCount: { type: Number, default: 0 },
+    // totalClearedAmount: { type: Number, default: 0 }, // kg
+    // totalClearTimeMins: { type: Number, default: 0 },
+    // avgClearTimeMins: { type: Number, default: 0 },
     lastFullAt: Date,
     lastClearedAt: Date,
+    
+    escalation: {
+      thresholdsHit: {    // 75%, 90%, 100%
+        '75%': { time: Date, notified: [String] },
+        '90%': { time: Date, notified: [String] },
+        '100%': { time: Date, notified: [String] }
+      },
+      timeEscalations: [{ // L1, L2, L3, L4
+        level: String,
+        role: String,
+        notifiedAt: Date
+      }],
+      status: { 
+        type: String, 
+        enum: ['normal', '75%', '90%', '100%', 'L1', 'L2', 'L3', 'L4'],
+        default: 'normal'
+      },
+      acknowledgedBy: String,
+      acknowledgedAt: Date
+    }
   },
   { timestamps: true },
 );

@@ -1,8 +1,7 @@
 import User from "../models/User_schema.js";
 import bcrypt from "bcryptjs";
-import IdcodeServices from "../idcode/idcode.service.js";
 
-
+/* ================= CREATE USER ================= */
 export const addUser = async (data) => {
   const existingUser = await User.findOne({
     $or: [{ email: data.email }, { phonenumber: data.phonenumber }],
@@ -12,25 +11,19 @@ export const addUser = async (data) => {
     throw new Error("User already exists");
   }
 
-  
-  const user_id = await IdcodeServices.generateCode("USER");
-  if (!user_id) {
-    throw new Error("Failed to generate user ID");
-  }
-
   const rawPassword = data.password || "User@123";
-  const hashedPassword = await bcrypt.hash(rawPassword, 10);
+
+const hashedPassword = await bcrypt.hash(rawPassword, 10);
 
   const user = await User.create({
     ...data,
-    user_id,           
     password: hashedPassword,
   });
 
   return user;
 };
 
-
+/* ================= LOGIN USER ================= */
 export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
 
@@ -52,27 +45,8 @@ export const loginUser = async ({ email, password }) => {
 };
 
 /* ================= GET USERS ================= */
-export const getUser = async (page = 1, limit = 8) => {
-  const skip = (page - 1) * limit;
-
-  const totalItems = await User.countDocuments();
-
-  const users = await User.find()
-    .select("-password")
-    .sort({  })
-    .skip(skip)
-    .limit(limit)
-    .lean();
-
-  return {
-    users,
-    pagination: {
-      totalItems,
-      totalPages: Math.ceil(totalItems / limit),
-      currentPage: page,
-      itemsPerPage: limit,
-    },
-  };
+export const getUser = async () => {
+  return await User.find().select("-password");
 };
 
 
@@ -109,4 +83,3 @@ export const changePassword = async (id, newPassword) => {
 
   return user;
 };
-

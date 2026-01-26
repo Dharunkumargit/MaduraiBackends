@@ -55,8 +55,9 @@ class RoleService {
         throw new Error("Role not found");
       }
       await User.updateMany(
-        {  id },
-        { $unset: { id: "" ,role:""} }
+        { role: deleted.role_id },
+        { $set: { role: null } }
+        
       );
       return deleted;
     } catch (error) {
